@@ -1,4 +1,4 @@
-interface Result {
+export interface Result {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -8,8 +8,8 @@ interface Result {
   average: number;
 }
 
-interface ExercisesValues {
-  exerciseHours: Array<number>;
+export interface ExercisesValues {
+  daily_exercises: Array<number>;
   target: number;
 }
 
@@ -18,7 +18,7 @@ const parseExercises = (args: Array<string>): ExercisesValues => {
   const targetString = args[2];
   const hoursString = args.slice(3, args.length);
 
-  const exerciseHours = hoursString.map((hours) => {
+  const daily_exercises = hoursString.map((hours) => {
     if (!isNaN(Number(hours))) return Number(hours);
     throw new Error('Provided values must all be numbers');
   });
@@ -26,19 +26,19 @@ const parseExercises = (args: Array<string>): ExercisesValues => {
     throw new Error('Provided values must all be numbers');
   }
 
-  return { exerciseHours, target: Number(targetString) };
+  return { daily_exercises, target: Number(targetString) };
 };
 
-const calculateExercises = (
-  exerciseHours: Array<number>,
+export const calculateExercises = (
+  daily_exercises: Array<number>,
   target: number
 ): Result => {
-  const periodLength = exerciseHours.length;
+  const periodLength = daily_exercises.length;
   const average =
-    exerciseHours.reduce((sum, num) => (sum += num), 0) /
+    daily_exercises.reduce((sum, num) => (sum += num), 0) /
     periodLength;
   const success = average / periodLength > target;
-  const trainingDays = exerciseHours.filter(
+  const trainingDays = daily_exercises.filter(
     (hours) => hours > 0
   ).length;
   let rating = 1;
@@ -63,8 +63,8 @@ const calculateExercises = (
 };
 
 try {
-  const { exerciseHours, target } = parseExercises(process.argv);
-  console.log(calculateExercises(exerciseHours, target));
+  const { daily_exercises, target } = parseExercises(process.argv);
+  console.log(calculateExercises(daily_exercises, target));
 } catch (error) {
   if (error instanceof Error) {
     console.error(error.message);
