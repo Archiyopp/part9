@@ -17,7 +17,10 @@ const parseArguments = (args: Array<string>): BmiValues => {
   }
 };
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (
+  height: number,
+  weight: number
+): string => {
   const bmi = weight / (height / 100) ** 2;
   if (bmi < 18.5) return 'Thin ( Underweight)';
   if (bmi < 24.9) return 'Normal (healthy weight)';
