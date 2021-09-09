@@ -16,6 +16,17 @@ export const getNonSensitivePatients = (): NonSensitivePatient[] => {
   );
 };
 
+export const getPatientById = (id: string): Patient | null => {
+  const patientById = patients.find((p) => p.id === id);
+  if (patientById) {
+    if (!patientById.entries) {
+      patientById.entries = [];
+    }
+    return patientById;
+  }
+  return null;
+};
+
 export const addPatient = (patient: NewPatient) => {
   const id = v1();
 
