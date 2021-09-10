@@ -14,11 +14,16 @@ import {
 } from 'semantic-ui-react';
 
 import { apiBaseUrl } from './constants';
-import { useStateValue, setPatientList } from './state';
+import {
+  useStateValue,
+  setPatientList,
+  setDiagnosisList,
+} from './state';
 import { Patient } from './types';
 
 import PatientListPage from './PatientListPage';
 import SinglePatient from './SinglePatientPage';
+import { getAllDiagnosis } from './services/diagnosisServices';
 
 const App = () => {
   const [, dispatch] = useStateValue();
@@ -35,7 +40,20 @@ const App = () => {
         console.error(e);
       }
     };
+    const fetchDiagnosisList = async () => {
+      try {
+        const diagnosisList = await getAllDiagnosis();
+        dispatch(setDiagnosisList(diagnosisList));
+      } catch (e) {
+        if (e instanceof Error) {
+          console.error(e.message);
+        } else {
+          console.log('Unknown catch', e);
+        }
+      }
+    };
     void fetchPatientList();
+    void fetchDiagnosisList();
   }, [dispatch]);
 
   return (
