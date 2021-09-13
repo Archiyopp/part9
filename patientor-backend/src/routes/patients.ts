@@ -4,7 +4,10 @@ import {
   getNonSensitivePatients,
   getPatientById,
 } from '../services/patientService';
-import { toNewPatientEntry } from '../utils';
+import {
+  toNewPatientEntry,
+  toNewEntryOfPatientEntries,
+} from '../utils';
 
 const router = express.Router();
 
@@ -15,6 +18,22 @@ router.get('/', (_req, res) => {
 router.get('/:id', (req, res) => {
   const id = req.params.id;
   res.send(getPatientById(id));
+});
+
+router.get('/:id/entries', (req, res) => {
+  try {
+    const id = req.params.id;
+    const patient = getPatientById(id);
+    const newEntry = toNewEntryOfPatientEntries(req.body);
+    patient?.entries.push(newEntry);
+    res.send(patient);
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).send(e.message);
+    } else {
+      console.log(e);
+    }
+  }
 });
 
 router.post('/', (req, res) => {
