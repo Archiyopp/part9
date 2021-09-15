@@ -1,3 +1,4 @@
+import { v1 } from 'uuid';
 import {
   Diagnose,
   Entry,
@@ -53,13 +54,12 @@ export const toNewEntryOfPatientEntries = (
   entry: NewEntriesFields
 ): Entry => {
   const type = parseEntryType(entry.type);
-  const id = parseString(entry.id, 'id');
   const date = parseDate(entry.date);
   const specialist = parseString(entry.specialist, 'specialist');
   const description = parseString(entry.description, 'description');
   const diagnosisCodes = parseDiagnosisCodes(entry.diagnosisCodes);
   const newEntry = {
-    id,
+    id: v1(),
     date,
     specialist,
     description,
@@ -150,7 +150,7 @@ const parseDiagnosisCodes = (
 const parseHealthRating = (
   healthRating: unknown
 ): HealthCheckRating => {
-  if (!healthRating || !isHealthRating(healthRating)) {
+  if (!isHealthRating(healthRating)) {
     throw new Error('Incorrect health check rating: ' + healthRating);
   }
   return healthRating;

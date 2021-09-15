@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
   res.send(getPatientById(id));
 });
 
-router.get('/:id/entries', (req, res) => {
+router.post('/:id/entries', (req, res) => {
   try {
     const id = req.params.id;
     const patient = getPatientById(id);
